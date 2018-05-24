@@ -10,6 +10,7 @@
 		<h1 align = "center"> Participating three cars in the demo version </h1>
 	</div>
 	<button onclick="start()">Start Race</button>
+	<button onclick="drawCar()">Set Cars</button>
 	<div id = "track">
 		<hr>
 		<div id = "blue" class = "car"></div>
@@ -20,6 +21,7 @@
 		<hr>
 	</div>
 <script>
+var blue, red, green;
 var Car = function(name, color, weight, add, init) {
 	var car = this;
 	this.name = name;
@@ -32,6 +34,15 @@ var Car = function(name, color, weight, add, init) {
 		position = (this.initialSpeed * time ) + 0.5 * (this.acceleration) + time * time;
 	};
 }
+
+function makeCar(idTag, color) {
+	idTag.style.background = color;
+	idTag.style.width = "60px";
+	idTag.style.height = "25px";
+	idTag.style.position = "relative";
+	return this;
+}
+
 function move(car) {
 	var pos = 0;
 	var id = setInterval(frame, 5);
@@ -45,14 +56,20 @@ function move(car) {
 		}
 	}
 }
+function drawCar() {
+	blue = document.getElementById("blue");
+	var blueCar = makeCar(blue, "blue");
+	green = document.getElementById("green");
+	var greenCar = makeCar(green, "green");
+	red = document.getElementById("red");
+	var redCar = makeCar(red, "red");
+
+}
 
 function start() {
-	var blue = document.getElementById("blue");
-	blue.style.background = "blue";
-	blue.style.width = "60px";
-	blue.style.height = "25px";
-	blue.style.position = "absolute";
 	move(blue);
+	move(green);
+	move(red);
 }
 
 </script>
