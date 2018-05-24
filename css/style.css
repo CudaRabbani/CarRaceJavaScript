@@ -1,0 +1,30 @@
+
+.car {
+	/*
+	width: 60px;
+	height: 25px;
+	*/
+	border: 1px solid black;
+}
+/*
+#blue {
+	background: blue;
+}
+
+#green {
+	background: green;
+}
+
+#red {
+	background: red;
+}
+*/
+#desc {
+	margin: 0px auto;
+}
+
+#track {
+	width : 1000 px;
+	background: yellow;
+	position: relative;
+}
