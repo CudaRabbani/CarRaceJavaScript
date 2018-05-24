@@ -19,28 +19,72 @@
 		<hr>
 		<div id = "green" class = "car"></div>
 		<hr>
+		<div id = "white" class = "car"></div>
+		<hr>
 	</div>
-<script>
-var blue, red, green;
-var Car = function(name, color, weight, add, init) {
-	var car = this;
-	this.name = name;
-	this.color = color;
-	this.weight = weight;
-	this.acceleration = acc;
-	this.initialSpeed = init;
-	this.position = 0;
-	this.move = function(time) {
-		position = (this.initialSpeed * time ) + 0.5 * (this.acceleration) + time * time;
-	};
-}
+	<script>
+	var blue, red, green, white, whiteCar;
+	function Car (divTag, color) {
+		this.initialSpeed = 1;
+		this.acceleration = 5;
+		//console.log(this.initialSpeed, this.acceleration);
+		divTag.style.background = color;
+		divTag.style.width = "60px";
+		divTag.style.height = "25px";
+		divTag.style.position = "relative";
 
+		this.move = function (divTag, time) {
+			var u = this.initialSpeed;
+			var t = time;
+			var a = this.acceleration;
+			var dist = 0;
+			var id = setInterval(frame(u, a, t, dist), 1);
+			function frame(u, a, t, dist) {
+				console.log("Calling frame");
+				if (dist == 600) {
+					console.log("Calling frame: if");
+					clearInterval(id);
+				}
+				else {
+					dist = dist + (u * t ) + 0.5 * (a * t * t);
+					console.log(dist);
+					divTag.style.left = dist + 'px';
+				}
+			}
+			/*
+			var id = setInterval(sayHi, time);
+			function sayHi() {
+			if(dist == 200) {
+			clearInterval(id);
+		}
+		else {
+		console.log("hi");
+		dist++;
+	}
+}
+*/
+/*
+function frame(u, a, t, dist) {
+console.log("Calling frame");
+if (dist == 600) {
+console.log("Calling frame: if");
+clearInterval(id);
+}
+else {
+console.log("Calling frame: else");
+dist = dist + (u * t ) + 0.5 * (a * t * t);
+console.log(dist);
+divTag.style.left = dist + 'px';
+}
+}
+*/
+};
+}
 function makeCar(idTag, color) {
 	idTag.style.background = color;
 	idTag.style.width = "60px";
 	idTag.style.height = "25px";
 	idTag.style.position = "relative";
-	return this;
 }
 
 function move(car) {
@@ -63,13 +107,18 @@ function drawCar() {
 	var greenCar = makeCar(green, "green");
 	red = document.getElementById("red");
 	var redCar = makeCar(red, "red");
+	white = document.getElementById("white");
+	whiteCar = new Car(white, "white");
+
 
 }
 
 function start() {
 	move(blue);
-	move(green);
-	move(red);
+	//	move(green);
+	//	move(red);
+	//	move(white);
+	whiteCar.move(white, 5);
 }
 
 </script>
