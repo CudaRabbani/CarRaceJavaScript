@@ -1,126 +1,142 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Car Racing</title>
-	<link rel = "stylesheet" type = "text/css" href = "css/style.css">
+    <meta charset="utf-8">
+    <title>Car Racing</title>
+    <link rel = "stylesheet" type = "text/css" href = "css/style.css">
 </head>
 <body>
-	<div id = "desc">
-		<h1 align = "center"> Participating three cars in the demo version </h1>
-	</div>
-	<button onclick="start()">Start Race</button>
-	<button onclick="drawCar()">Set Cars</button>
-	<div id = "track">
-		<hr>
-		<div id = "blue" class = "car"></div>
-		<hr>
-		<div id = "red" class = "car"></div>
-		<hr>
-		<div id = "green" class = "car"></div>
-		<hr>
-		<div id = "white" class = "car"></div>
-		<hr>
-	</div>
-	<script>
-	var blue, red, green, white, whiteCar;
-	function Car (divTag, color) {
-		this.initialSpeed = 1;
-		this.acceleration = 5;
-		//console.log(this.initialSpeed, this.acceleration);
-		divTag.style.background = color;
-		divTag.style.width = "60px";
-		divTag.style.height = "25px";
-		divTag.style.position = "relative";
+    <div id = "desc">
+        <h1 align = "center"> Participating three cars in the demo version </h1>
+    </div>
+    <button onclick="start()">Start Race</button>
+    <button onclick="drawCar()">Set Cars</button>
+    <div id = "track">
+        <hr>
+        <div id = "blue" class = "car"></div>
+        <hr>
+        <div id = "red" class = "car"></div>
+        <hr>
+        <div id = "green" class = "car"></div>
+        <hr>
+        <div id = "white" class = "car"></div>
+        <hr>
+    </div>
+    <div id = "status">
+    </div>
+    <script>
+    var blue, blueCar, red, redCar, green, greenCar, white, whiteCar;
+    var trackWidth = window.innerWidth|| document.documentElement.clientWidth
+                        || document.body.clientWidth;
+    trackWidth = trackWidth - 60;
+//    console.log(trackWidth);
 
-		this.move = function (divTag, time) {
-			var u = this.initialSpeed;
-			var t = time;
-			var a = this.acceleration;
-			var dist = 0;
-			var id = setInterval(frame(u, a, t, dist), 1);
-			function frame(u, a, t, dist) {
-				console.log("Calling frame");
-				if (dist == 600) {
-					console.log("Calling frame: if");
-					clearInterval(id);
-				}
-				else {
-					dist = dist + (u * t ) + 0.5 * (a * t * t);
-					console.log(dist);
-					divTag.style.left = dist + 'px';
-				}
-			}
-			/*
-			var id = setInterval(sayHi, time);
-			function sayHi() {
-			if(dist == 200) {
-			clearInterval(id);
-		}
-		else {
-		console.log("hi");
-		dist++;
-	}
-}
-*/
-/*
-function frame(u, a, t, dist) {
-console.log("Calling frame");
-if (dist == 600) {
-console.log("Calling frame: if");
-clearInterval(id);
-}
-else {
-console.log("Calling frame: else");
-dist = dist + (u * t ) + 0.5 * (a * t * t);
-console.log(dist);
-divTag.style.left = dist + 'px';
-}
-}
-*/
-};
-}
-function makeCar(idTag, color) {
-	idTag.style.background = color;
-	idTag.style.width = "60px";
-	idTag.style.height = "25px";
-	idTag.style.position = "relative";
-}
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+    function Car (divTag, color) {
+        this.initialSpeed = getRandomInt(3);
+        this.acceleration = Math.random()*10;
+        this.pos = 0;
+        divTag.style.background = color;
+        divTag.style.width = "60px";
+        divTag.style.height = "25px";
+        divTag.style.position = "relative";
 
-function move(car) {
-	var pos = 0;
-	var id = setInterval(frame, 5);
-	function frame() {
-		if (pos == 500) {
-			clearInterval(id);
-		}
-		else {
-			pos++;
-			car.style.left = pos + 'px';
-		}
-	}
-}
-function drawCar() {
-	blue = document.getElementById("blue");
-	var blueCar = makeCar(blue, "blue");
-	green = document.getElementById("green");
-	var greenCar = makeCar(green, "green");
-	red = document.getElementById("red");
-	var redCar = makeCar(red, "red");
-	white = document.getElementById("white");
-	whiteCar = new Car(white, "white");
+        this.move = function (divTag, time) {
+            var u = this.initialSpeed;
+            var t = time;
+            var a = this.acceleration;
+            var dist = this.pos;
+            var loopCounter = 0;
+            var id = setInterval(frame, 500, u, a, t, dist);
+            function frame() {
+                if (dist >= trackWidth) {
+                    clearInterval(id);
+                }
+                else {
+                    dist = dist + (u * t ) + 0.5 * (a * t * t);
+                    divTag.style.left = dist + 'px';
+                }
+                status(color, dist, loopCounter);
+                loopCounter++;
+            }
+            function status(color, pos, count) {
+                var carName = color+"Car";
+                var name = "Car Name: " + color+"<br>";
+                var position = "Current position: "+pos.toFixed(2);
+
+                var parentDiv, div;
+                parentDiv = document.getElementById("status");
+
+                if(count == 0)
+                {
+                    div = document.createElement("div");
+                    div.id = carName;
+                    div.style.width = "300px";
+                    div.style.border = "1px 2px solid";
+                    div.style.cssFloat = "left";
+                    div.style.textAlign = "center";
+                    parentDiv.appendChild(div);
+                }
+                else {
+                    div = document.getElementById(carName);
+                    div.innerHTML = name + position;
+                }
+            }
+        }
+    }
 
 
-}
 
-function start() {
-	move(blue);
-	//	move(green);
-	//	move(red);
-	//	move(white);
-	whiteCar.move(white, 5);
-}
+    function drawCar() {
+        blue = document.getElementById("blue");
+        blueCar = new Car(blue,"blue");
+        red = document.getElementById("red");
+        redCar = new Car(red, "red");
+        green = document.getElementById("green");
+        greenCar = new Car(green, "green");
+        /*
+        green = document.getElementById("green");
+        var greenCar = makeCar(green, "green");
+        red = document.getElementById("red");
+        var redCar = makeCar(red, "red");
+        */
+        white = document.getElementById("white");
+        whiteCar = new Car(white, "white");
+        document.getElementById("track").style.width = 1000;
 
-</script>
+    }
+
+    function start() {
+        blueCar.move(blue, 5);
+        whiteCar.move(white, 5);
+        redCar.move(red, 5);
+        greenCar.move(green, 5);
+    }
+
+    </script>
+    <!--
+    function makeCar(idTag, color) {
+        idTag.style.background = color;
+        idTag.style.width = "60px";
+        idTag.style.height = "25px";
+        idTag.style.position = "relative";
+    }
+
+    function move(car) {
+        var pos = 0;
+        var id = setInterval(frame, 5);
+        function frame() {
+            if (pos == 500) {
+                clearInterval(id);
+            }
+            else {
+                pos++;
+                car.style.left = pos + 'px';
+            }
+        }
+    }
+-->
 </body>
 </html>
